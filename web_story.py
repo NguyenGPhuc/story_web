@@ -1,7 +1,7 @@
 from flask import Flask
 
-app = Flask(name__name__)
+app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return "Main page!"
+def home():
+    return render_tempale('index.html')
