@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation and Image Generation</title>
+    <!-- You can link your CSS file here if needed -->
+    <!-- <link rel="stylesheet" href="static/css/style.css"> -->
+</head>
+<body>
+
+    <div style="display: flex;">
+
+        <!-- Text input area -->
+        <div style="flex: 1; padding: 20px;">
+            <h3>Input Text</h3>
+            <textarea id="inputText" rows="8" cols="40" placeholder="Enter text here"></textarea>
+            <br>
+            <button onclick="translateText()">Translate</button>
+        </div>
+
+        <!-- Translated text area -->
+        <div style="flex: 1; padding: 20px;">
+            <h3>Translated Text (English)</h3>
+            <div id="translatedText"></div>
+        </div>
+
+    </div>
+
+    <!-- Image display area -->
+    <div style="padding: 20px;">
+        <h3>Generated Image</h3>
+        <img id="generatedImage" alt="Generated Image">
+    </div>
+
+    <!-- You can link your JavaScript file here if needed -->
+    <!-- <script src="static/js/script.js"></script> --> 
+    <button onclick="translateText()"> Viet2Eng</button>
+    
+
+    <script>
+        function translateText() {
+            // Your translation logic here
+            // Example: Fetch translated text using an API
+            fetch('/api/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ inputText: 'Describe the the image you want to generate'})
+            })
+            .then(response => response.json())
+            .then(data => {console.log('Data received:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+            // Dummy data for illustration
+            var translatedText = "Translated text in English";
+            var imageUrl = "path/to/generated/image.jpg";
+
+            // Display translated text
+            document.getElementById("translatedText").innerText = translatedText;
+
+            // Display generated image
+            document.getElementById("generatedImage").src = imageUrl;
+        }
+    </script>
+
+</body>
+</html>
