@@ -35,33 +35,43 @@
 
     <!-- You can link your JavaScript file here if needed -->
     <!-- <script src="static/js/script.js"></script> --> 
-    <button onclick="translateText()"> Viet2Eng</button>
+    <!-- <button onclick="translateText()"> Viet2Eng</button> -->
     
 
     <script>
         function translateText() {
             // Your translation logic here
             // Example: Fetch translated text using an API
-            fetch('/api/translate', {
+            fetch('/translateText', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify({ inputText: 'Describe the the image you want to generate'})
+                // body: JSON.stringify({ inputText: 'Describe the the image you want to generate'})
+                body: 'inputText=' + encodeURIComponent(inputText),
             })
             .then(response => response.json())
-            .then(data => {console.log('Data received:', data);
+            .then(data => {
+                document.getElementById('translatedText').innerText = data.translatedText;
         })
         .catch(error => {
             console.error('Error:', error);
         });
 
             // Dummy data for illustration
-            var translatedText = "Translated text in English";
-            var imageUrl = "path/to/generated/image.jpg";
+            // var translatedText = "Translated text in English";
+            // var imageUrl = "path/to/generated/image.jpg";
+
+            // // Assuming data.translatedText is a DOM element
+            // var translatedTextElement = data.translatedText;
+
+            // // Extract text content from the element
+            // var translatedText = translatedTextElement.innerText;
+
 
             // Display translated text
-            document.getElementById("translatedText").innerText = translatedText;
+            document.getElementById("translatedText").innerText = data.translatedText;;
+        
 
             // Display generated image
             document.getElementById("generatedImage").src = imageUrl;

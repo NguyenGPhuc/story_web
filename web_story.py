@@ -3,24 +3,30 @@ import openai_service
 
 app = Flask(__name__)
 
+# Start default site
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
 @app.route('/translateText', methods=['POST'])
 def picture_prompt():
     if request.method == "POST":
-        user_input = request.form.get('user_input')
 
+        translatedText = ''
+
+        #Funtion for translating from vietnamese to english
         try:
-            openai_service.translate_viet2en(user_input)
+            inputText = request.form.get('inputText')
+            translatedText = openai_service.translate_viet2en(request.form.get('inputText'))
+
         except:
             print('Unable to call from API')
 
     else: 
         print ("Input was not correctly process")
 
-    return render_template('result.html', user_input=user_input, generated_text=generated_text)
+    return render_template('index.html', inputText=inputText, translatedText=translatedText)
 
 if __name__ == '__main__':
     app.run(debug = True)

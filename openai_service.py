@@ -22,13 +22,19 @@ def translate_viet2en (viet_text):
             model='gpt-3.5-turbo-instruct',
             prompt = "Translate this Vietnamese passage or sentence < " + viet_text + " > to english",
         )
-        print(completion.choices[0].text)
-        # print(dict(completion).get('usage'))
-        # print(completion.model_dump_json(indent=2))
+        
+        translateEN = completion.choices[0].text
+        print(translateEN)
+        print(dict(completion).get('usage'))
+        print(completion.model_dump_json(indent=2))
+
+        return translateEN
     
 
     except openai.BadRequestError as e:
         print (f"API call failed: {e}")
+
+# translate_viet2en(viet_text)
 
 
 
