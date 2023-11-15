@@ -37,10 +37,12 @@
     
 
     <script>
+
+        var cleanedTranslated = '';
+
         function translateText() {
 
             var inputText = document.getElementById('inputText').value;
-
            
             // Example: Fetch translated text using an API
             fetch('/translateText', {
@@ -59,8 +61,10 @@
                 // Display translated text in the textarea (Client side parsing)
                 // document.getElementById('translatedTextArea').value = cleanedText;
 
+                cleanedTranslated = data.translatedText;
+
                 // Display translated text in the textarea
-                document.getElementById('translatedTextArea').value = data.translatedText;
+                document.getElementById('translatedTextArea').value = cleanedTranslated;
 
             console.log('Response:', data);  
         })
@@ -70,14 +74,24 @@
         });
         }
 
-        function generatedImage() {
+        function generateImage() {
+            fetch('/generateImage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify ({imageUrl: cleanedTranslated}),
+                
+            })
+            .then(response => response.json())
+            .then(data => {
 
-            // Define image URL/path
-            var imageUrl = 'output/image.jpeg';
+                // Display the generated image
+                document.getElementById('generatedImage').src = data.imageUrl;
+                console.log('Response:', data);
 
-            // Display generated image
-            document.getElementById('generatedImage').src = imageUrl;
-
+            console.log('Response:', data);  
+        });
         }
         
     </script>

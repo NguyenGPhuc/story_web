@@ -1,6 +1,7 @@
 import os
 import json
 import openai
+import logging
 from openai import OpenAI
 
 from config import api_key
@@ -15,7 +16,6 @@ client = OpenAI()
 
 # Handle translating from Vietnamese to English
 def translate_viet2en (viet_text):
-    # Attempt to use key form text file
     try:
         #Make your OpenAI API request here
         completion = client.completions.create(
@@ -34,7 +34,31 @@ def translate_viet2en (viet_text):
     except openai.BadRequestError as e:
         print (f"API call failed: {e}")
 
-# translate_viet2en(viet_text)
+def prompt_image(texPrompt):
+    try:
+        response = client.images.generate(
+            model="dall-e-3",
+            prompt=texPrompt,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+
+
+        print(dict(response).get('usage'))
+        print(response.model_dump_json(indent=2))
+
+        image_url = response.data[0].url
+
+        return image_url
+    
+    except Exception as e:
+        logging.exception('Failed to generate image: %s', str(e))
+        return None
+
+    
+
+# prompt_image(translate_viet2en(viet_text))
 
 
 
