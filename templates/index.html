@@ -41,7 +41,6 @@
 
             var inputText = document.getElementById('inputText').value;
 
-
            
             // Example: Fetch translated text using an API
             fetch('/translateText', {
@@ -54,11 +53,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Clean up extra characters
-                var cleanedText =  data.translatedText.replace(/\n+/g, '\n');
+                // Clean up extra characters using REGEX (Client side parsing)
+                // var cleanedText =  data.translatedText.replace(/^\n+|\n+$/g, '').replace(/^"|"$/g, '');
+
+                // Display translated text in the textarea (Client side parsing)
+                // document.getElementById('translatedTextArea').value = cleanedText;
 
                 // Display translated text in the textarea
-                document.getElementById('translatedTextArea').value = cleanedText;
+                document.getElementById('translatedTextArea').value = data.translatedText;
+
             console.log('Response:', data);  
         })
         
