@@ -4,5 +4,5 @@ config.py
 eleven_api_key.txt
 log_record.txt
 temp.txt
-.output/
+output/
 /__pycache__
