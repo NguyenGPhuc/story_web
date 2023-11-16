@@ -1,5 +1,15 @@
 @echo off
 
+
+rem Check if venv folder exists. If not creates one
+if not exist venv (
+    echo Creating virtual environment...
+    python -m venv venv
+)
+
+rem Install dependencies
+pip install -r requirements.txt
+
 rem Activate the virtual environment
 call venv\Scripts\activate
 
