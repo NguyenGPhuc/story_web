@@ -26,7 +26,7 @@ def translated_text():
         #Funtion for translating from vietnamese to english
         try:
             # Gets transltion text from API
-            translatedText = openai_service.translate_viet2en(request.form.get('inputText'))
+            translatedText = openai_service.translate_viet2en(inputText)
             # Remove any extra characters winthin the translation string
             parseTranslate = translatedText.replace('\n', '').replace('"', '').replace('.', '')
 
@@ -49,8 +49,19 @@ def generate_image():
     if request.method == 'POST':
         try:
 
+            # Set model and image size
+            imageSize = request.form.get('imageDimensions')
+            if imageSize == "512x512":
+                imageModel = 'dall-e-2'
+            else:
+                imageModel = 'dall-e-3'
+
+
+            parseTranslate = request.form.get('translatedTextArea')
+
             # Get image url form API
-            imageUrl = openai_service.prompt_image(parseTranslate)
+            imageUrl = openai_service.prompt_image(imageModel, parseTranslate, imageSize)
+            
 
 
             if imageUrl is not None:
@@ -74,6 +85,13 @@ def translate_N_Generate():
         try:
             # Get user input (Vietnamese text)
             inputText = request.form.get('inputText')
+
+            # Set model and image size
+            imageSize = request.form.get('imageDimensions')
+            if imageSize == "512x512":
+                imageModel = 'dall-e-2'
+            else:
+                imageModel = 'dall-e-3'
             
             # Check if inputText is not None before proceeding
             if inputText is not None:
@@ -86,8 +104,10 @@ def translate_N_Generate():
                 # Remove any extra characters within the translation string
                 parseTranslate = translatedText.replace('\n', '').replace('"', '').replace('.', '')
 
+                
+
                 # Get generated image URL from API
-                imageUrl = openai_service.prompt_image(parseTranslate)
+                imageUrl = openai_service.prompt_image(imageModel, parseTranslate, imageSize)
 
                 if imageUrl is not None:
                     save_image(imageUrl)
@@ -100,7 +120,6 @@ def translate_N_Generate():
             logging.exception('Failed to generate image: %s', str(e))
             return jsonify({'error': 'Failed to generate image'})
 
-        # return jsonify({'imageUrl':imageUrl})
 
         return jsonify({'inputText': inputText, 'translatedText': parseTranslate, 'imageUrl':imageUrl})
     else:
@@ -115,7 +134,7 @@ def save_image(imageUrl):
 
         # Use date and time for naming
         timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        imageFilename = f'generated_image_{timestamp}.jpeg'
+        imageFilename = f'{timestamp}.jpeg'
         imagePath = os.path.join(output_folder, imageFilename)
 
         # Download the image from url
@@ -132,6 +151,3 @@ def save_image(imageUrl):
 
 if __name__ == '__main__':
     app.run(debug = True)
-
-
-

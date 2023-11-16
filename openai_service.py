@@ -34,22 +34,13 @@ def translate_viet2en (viet_text):
     except openai.BadRequestError as e:
         print (f"API call failed: {e}")
 
-def prompt_image(texPrompt):
+def prompt_image(selectModel, texPrompt, size):
     try:
-        # For Dall-e-3 actual generation ($.04)
-        # response = client.images.generate(
-        #     model="dall-e-3",
-        #     prompt=texPrompt,
-        #     size="1024x1024",
-        #     quality="standard",
-        #     n=1,
-        # )
-
-        # For Dall-e-2 sample and texting ($.016$)
+        # Calling Dall-e API
         response = client.images.generate(
-            model="dall-e-2",
+            model=selectModel,
             prompt=texPrompt,
-            size="512x512",
+            size=size,
             quality="standard",
             n=1,
         )
@@ -67,11 +58,4 @@ def prompt_image(texPrompt):
         return None
 
     
-
 # prompt_image(translate_viet2en(viet_text))
-
-
-
-
-
-
