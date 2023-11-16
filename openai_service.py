@@ -20,7 +20,7 @@ def translate_viet2en (viet_text):
         #Make your OpenAI API request here
         completion = client.completions.create(
             model='gpt-3.5-turbo-instruct',
-            prompt = "Translate this Vietnamese passage or sentence < " + viet_text + " > to english",
+            prompt = "Translate this passage or sentence < " + viet_text + " > to english",
         )
         
         translateEN = completion.choices[0].text
@@ -36,15 +36,25 @@ def translate_viet2en (viet_text):
 
 def prompt_image(texPrompt):
     try:
+        # For Dall-e-3 actual generation ($.04)
+        # response = client.images.generate(
+        #     model="dall-e-3",
+        #     prompt=texPrompt,
+        #     size="1024x1024",
+        #     quality="standard",
+        #     n=1,
+        # )
+
+        # For Dall-e-2 sample and texting ($.016$)
         response = client.images.generate(
-            model="dall-e-3",
+            model="dall-e-2",
             prompt=texPrompt,
-            size="1024x1024",
+            size="512x512",
             quality="standard",
             n=1,
         )
 
-
+        
         print(dict(response).get('usage'))
         print(response.model_dump_json(indent=2))
 

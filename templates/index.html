@@ -17,6 +17,8 @@
             <textarea id="inputText" rows="8" cols="40" placeholder="Enter text here"></textarea>
             <br>
             <button onclick="translateText()">Translate</button>
+            <br> <br>
+            <button onClick="translateGenerate()">Translate and Generate</button>
         </div>
 
         <!-- Translated text area -->
@@ -39,10 +41,11 @@
     <script>
 
         var cleanedTranslated = '';
+        var inputText = ''
 
         function translateText() {
 
-            var inputText = document.getElementById('inputText').value;
+            inputText = document.getElementById('inputText').value;
            
             // Example: Fetch translated text using an API
             fetch('/translateText', {
@@ -68,7 +71,6 @@
 
             console.log('Response:', data);  
         })
-        
         .catch(error => {
             console.error('Error:', error);
         });
@@ -92,6 +94,35 @@
 
             console.log('Response:', data);  
         });
+        }
+
+        function translateGenerate(){
+
+            inputText = document.getElementById('inputText').value;
+
+            fetch('/translateGenerate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'inputText=' + encodeURIComponent(inputText),
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                cleanedTranslated = data.translatedText;
+
+                // Display translated text in the textarea
+                document.getElementById('translatedTextArea').value = cleanedTranslated;
+
+                // Display the generated image
+                document.getElementById('generatedImage').src = data.imageUrl;
+
+            console.log('Response:', data);  
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
         
     </script>
