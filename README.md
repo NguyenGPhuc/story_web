@@ -1,10 +1,12 @@
 *** Description ***
-A local web UI that used OpenAI API to translate langauge text into English. The translated text get pass into Dall-E as prompt for image generation. Has build in interface that allows uers change
-image dimension and batch number.
+A local Web UI for creative story tellers. Offers a variety of toosl to help put your ideas into writing as quickly as possible.
+Uses Google API for multi language translations, OpenAI for theme adaptations, and Grammarly API for sentence errors.
+Able to generate images to go along with text for a more immersive narritive. Uses OenAI's Dall-E for image generate using user prompt.
 
 *** Purpose ***
-My cousin owns a wedding arrangement company in Vietnam. The purpose of this program is to help him create concept arts in his own natural language (Vietnamese). This can also be use to create stock
-images for advertisement to reach a wider audience. 
+I have many narratives that I keeps in my mind. The problem is I don't the time nor patients to put them on paper. 
+I wrote this program for myself and those who share similar dilema. The purpose is to quickly writes, fix, and modify
+a narrative with AI assistant. 
 
 *** Requirements ***
 Download and install Python - https://www.python.org/downloads/
