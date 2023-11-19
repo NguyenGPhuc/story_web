@@ -20,7 +20,7 @@ def translated_text():
 
         global parseTranslate
 
-        # Get user input (Vietamese text)
+        # Get user input (Any language text)
         inputText = request.form.get('inputText')
 
         #Funtion for translating from vietnamese to english

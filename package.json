@@ -1,0 +1,15 @@
+{
+  "name": "story2",
+  "version": "1.0.0",
+  "description": "*** Description ***\r A local Web UI for creative story tellers. Offers a variety of toosl to help put your ideas into writing as quickly as possible.\r Uses Google API for multi language translations, OpenAI for theme adaptations, and Grammarly API for sentence errors.\r Able to generate images to go along with text for a more immersive narritive. Uses OenAI's Dall-E for image generate using user prompt.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

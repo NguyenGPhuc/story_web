@@ -6,3 +6,4 @@ log_record.txt
 temp.txt
 output/
 /__pycache__
+node_modules/

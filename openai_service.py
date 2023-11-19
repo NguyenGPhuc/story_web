@@ -14,26 +14,26 @@ client = OpenAI()
 # viet_text = "Một cậu bé đi qua một cái cầu tre gỗ."
 
 
-# Handle translating from Vietnamese to English
-def translate_viet2en (viet_text):
+# Handle rewriting a passage into a different theme
+def re_theme (rawText, author):
     try:
         #Make your OpenAI API request here
         completion = client.completions.create(
             model='gpt-3.5-turbo-instruct',
-            prompt = "Translate this passage or sentence < " + viet_text + " > to english",
+            prompt = "Rewite this passage [" + rawText + "], mimicking the writing of author [" + author + "]"
         )
         
-        translateEN = completion.choices[0].text
-        print(translateEN)
+        diffTheme = completion.choices[0].text
+        print(diffTheme)
         print(dict(completion).get('usage'))
         print(completion.model_dump_json(indent=2))
 
-        return translateEN
-    
-
+        return diffTheme
     except openai.BadRequestError as e:
         print (f"API call failed: {e}")
 
+
+# Handle (optional) image genration for the whole page
 def prompt_image(selectModel, texPrompt, size):
     try:
         # Calling Dall-e API
