@@ -1,0 +1,7 @@
+
+/* Basic styling for the dropdowns */
+select {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}

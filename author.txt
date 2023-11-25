@@ -1,0 +1,148 @@
+{
+  "authors": [
+    {
+      "name": "Edgar Allan Poe",
+      "summary": "Known for his gothic and macabre tales, often exploring themes of madness and death."
+    },
+    {
+      "name": "Franz Kafka",
+      "summary": "Renowned for his surreal and existential narratives, often featuring protagonists facing absurd situations."
+    },
+    {
+      "name": "Jorge Luis Borges",
+      "summary": "Master of magical realism, blending fantasy and reality with intricate, intellectual narratives."
+    },
+    {
+      "name": "Ray Bradbury",
+      "summary": "Notable for his science fiction and fantasy works, often exploring dystopian themes and the impact of technology on society."
+    },
+    {
+      "name": "Kurt Vonnegut",
+      "summary": "Recognized for his satirical and darkly humorous style, often addressing the absurdities of human behavior and society."
+    },
+    {
+      "name": "Gabriel García Márquez",
+      "summary": "Pioneer of magical realism, weaving fantastical elements into everyday life."
+    },
+    {
+      "name": "Philip K. Dick",
+      "summary": "A prolific writer of science fiction, exploring themes of reality, identity, and consciousness."
+    },
+    {
+      "name": "Italo Calvino",
+      "summary": "Known for his experimental and postmodern narratives, often blurring the lines between reality and fiction."
+    },
+    {
+      "name": "Neil Gaiman",
+      "summary": "A contemporary author with a unique blend of fantasy, mythology, and dark whimsy."
+    },
+    {
+      "name": "H.P. Lovecraft",
+      "summary": "Famous for his cosmic horror and Cthulhu Mythos."
+    },
+    {
+      "name": "Haruki Murakami",
+      "summary": "Notable for his surreal and dreamlike storytelling, often blending the ordinary with the extraordinary."
+    },
+    {
+      "name": "China Miéville",
+      "summary": "Known for his works in the New Weird genre, featuring fantastical and often grotesque elements."
+    },
+    {
+      "name": "Octavia E. Butler",
+      "summary": "A pioneering author in science fiction, exploring themes of race, gender, and power."
+    },
+    {
+      "name": "David Foster Wallace",
+      "summary": "Renowned for his complex and innovative narrative structures, often addressing modern life and consciousness."
+    },
+    {
+      "name": "Hidetaka Miyazaki",
+      "summary": "Primarily a game director (known for the Souls series) with atmospheric and challenging narratives."
+    },
+    {
+      "name": "Hideo Kojima",
+      "summary": "Renowned game designer (known for Metal Gear Solid and Death Stranding) with intricate storytelling and complex themes."
+    },
+    {
+      "name": "George R. R. Martin",
+      "summary": "Renowned for the epic fantasy series 'A Song of Ice and Fire,' adapted into the popular TV series 'Game of Thrones.'"
+    },
+    {
+      "name": "J.K. Rowling",
+      "summary": "Famous for the 'Harry Potter' series, a global phenomenon that captivated readers of all ages."
+    },
+    {
+      "name": "Sun Tzu",
+      "summary": "Ancient Chinese military strategist and philosopher, author of 'The Art of War,' a classic treatise on strategy and warfare."
+    },
+    {
+      "name": "Agatha Christie",
+      "summary": "The best-selling novelist of all time, known for her detective novels, including 'Murder on the Orient Express' and 'Death on the Nile.'"
+    },
+    {
+      "name": "J.R.R. Tolkien",
+      "summary": "Author of 'The Hobbit' and 'The Lord of the Rings,' creating a rich fantasy world that has influenced the genre for decades."
+    },
+    {
+      "name": "Jane Austen",
+      "summary": "Renowned for classic novels like 'Pride and Prejudice' and 'Sense and Sensibility,' exploring themes of love and societal expectations."
+    },
+    {
+      "name": "Charles Dickens",
+      "summary": "Iconic Victorian novelist, known for works such as 'A Tale of Two Cities' and 'Great Expectations,' highlighting social issues of the time."
+    },
+    {
+      "name": "Mark Twain",
+      "summary": "Famous for 'The Adventures of Tom Sawyer' and 'Adventures of Huckleberry Finn,' capturing the essence of American life."
+    },
+    {
+      "name": "Homer",
+      "summary": "Ancient Greek poet traditionally said to be the author of 'The Iliad' and 'The Odyssey,' foundational works in Western literature."
+    },
+    {
+      "name": "Leo Tolstoy",
+      "summary": "Russian author of 'War and Peace' and 'Anna Karenina,' exploring themes of morality, spirituality, and the human experience."
+    },
+    {
+      "name": "William Faulkner",
+      "summary": "Nobel Prize-winning American writer, known for novels like 'The Sound and the Fury' and 'As I Lay Dying.'"
+    },
+    {
+      "name": "Gabriel García Márquez",
+      "summary": "Nobel Prize-winning Colombian author, known for 'One Hundred Years of Solitude' and 'Love in the Time of Cholera.'"
+    },
+    {
+      "name": "Fyodor Dostoevsky",
+      "summary": "Russian novelist and philosopher, author of 'Crime and Punishment' and 'The Brothers Karamazov,' exploring existential and psychological themes."
+    },
+    {
+      "name": "Toni Morrison",
+      "summary": "Nobel Prize-winning American author, known for works like 'Beloved' and 'Song of Solomon,' addressing African American experiences."
+    },
+    {
+      "name": "Gillian Flynn",
+      "summary": "Contemporary author known for psychological thrillers like 'Gone Girl' that explore dark and twisted narratives."
+    },
+    {
+      "name": "Michael Ende",
+      "summary": "German author of 'The NeverEnding Story,' a fantasy novel that has become a classic in children's literature."
+    },
+    {
+      "name": "Neil Gaiman",
+      "summary": "A versatile author known for works like 'American Gods' and 'Coraline,' combining fantasy, mythology, and horror."
+    },
+    {
+      "name": "Harper Lee",
+      "summary": "Author of 'To Kill a Mockingbird,' a classic novel addressing racial injustice in the American South."
+    },
+    {
+      "name": "Arthur Conan Doyle",
+      "summary": "Creator of Sherlock Holmes, the legendary detective featured in numerous detective stories and novels."
+    },
+    {
+      "name": "Roald Dahl",
+      "summary": "Beloved children's author known for classics like 'Charlie and the Chocolate Factory' and 'Matilda.'"
+    }
+  ]
+}

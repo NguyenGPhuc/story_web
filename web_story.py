@@ -5,43 +5,50 @@ import os
 from datetime import datetime
 from PIL import Image
 import requests
+import json
 
 app = Flask(__name__)
 
 # Start default site
 @app.route('/')
 def home():
-    return render_template('index.html')
+   
+    with open('author.txt', 'r') as file:
+        authors = json.load(file)
+    with open ('category.txt', 'r') as file:
+        categories = json.load(file)
 
+    return render_template('index.html', authors=authors, categories=categories)
+  
 
-@app.route('/translateText', methods=['POST'])
-def translated_text():
+@app.route('/changeTheme', methods=['POST'])
+def change_theme():
     if request.method == "POST":
 
-        global parseTranslate
+        global parseText
 
         # Get user input (Any language text)
         inputText = request.form.get('inputText')
 
-        #Funtion for translating from vietnamese to english
+        # 
         try:
-            # Gets transltion text from API
-            translatedText = openai_service.translate_viet2en(inputText)
-            # Remove any extra characters winthin the translation string
-            parseTranslate = translatedText.replace('\n', '').replace('"', '').replace('.', '')
+            # Get modified text from API
+            modText = openai_service.re_theme(inputText)
+            # Remove any extra characters winthin the string
+            parseText = modText.replace('\n', '').replace('"', '').replace('.', '')
 
 
         except:
             print('Unable to call from API')
         
         # Return translated text in json format
-        return jsonify({'translatedText': parseTranslate, 'inputText': inputText})
+        return jsonify({'modText': parseText, 'inputText': inputText})
 
     else: 
         print ("User input was not processed correctly")
 
 
-    return render_template('index.html', inputText='', translatedText='')
+    return render_template('index.html', inputText='', modText='')
 
 # Generate image using translated text
 @app.route('/generateImage', methods=['POST'])
@@ -57,10 +64,10 @@ def generate_image():
                 imageModel = 'dall-e-3'
 
 
-            parseTranslate = request.form.get('translatedTextArea')
+            parseText = request.form.get('modTextArea')
 
             # Get image url form API
-            imageUrl = openai_service.prompt_image(imageModel, parseTranslate, imageSize)
+            imageUrl = openai_service.prompt_image(imageModel, parseText, imageSize)
             
 
 
@@ -77,54 +84,46 @@ def generate_image():
         print('Unable to generate image')
         return jsonify({'error': 'Unable to generate image'})
 
-# Translate and generate image.
-# Doesn't display translated text.
-@app.route('/translateGenerate', methods=['POST'])
-def translate_N_Generate():
-    if request.method == 'POST':
-        try:
-            # Get user input (Vietnamese text)
-            inputText = request.form.get('inputText')
 
-            # Set model and image size
-            imageSize = request.form.get('imageDimensions')
-            if imageSize == "512x512":
-                imageModel = 'dall-e-2'
-            else:
-                imageModel = 'dall-e-3'
+# # Doesn't display translated text.
+# @app.route('/translateText', methods=['POST'])
+# def g_translate():
+#     if request.method == 'POST':
+#         try:
+#             # Get user input (Vietnamese text)
+#             inputText = request.form.get('inputText')
             
-            # Check if inputText is not None before proceeding
-            if inputText is not None:
+#             # Check if inputText is not None before proceeding
+#             if inputText is not None:
 
-                print(inputText)
+#                 print(inputText)
 
-                # Gets translation text from API
-                translatedText = openai_service.translate_viet2en(inputText)
+#                 # Gets translation text from API
+#                 modText = openai_service.re_theme(inputText)
                 
-                # Remove any extra characters within the translation string
-                parseTranslate = translatedText.replace('\n', '').replace('"', '').replace('.', '')
-
-                
-
-                # Get generated image URL from API
-                imageUrl = openai_service.prompt_image(imageModel, parseTranslate, imageSize)
-
-                if imageUrl is not None:
-                    save_image(imageUrl)
-
-                # Return the results
-                return jsonify({'inputText': inputText, 'translatedText': parseTranslate, 'imageUrl': imageUrl})
-            else:
-                return jsonify({'error': 'InputText is None'})
-        except Exception as e:
-            logging.exception('Failed to generate image: %s', str(e))
-            return jsonify({'error': 'Failed to generate image'})
+#                 # Remove any extra characters within the translation string
+#                 parseText = modText.replace('\n', '').replace('"', '').replace('.', '')
 
 
-        return jsonify({'inputText': inputText, 'translatedText': parseTranslate, 'imageUrl':imageUrl})
-    else:
-        print('Unable to generate image')
-        return jsonify({'error': 'Unable to generate image'})
+#                 # Get generated image URL from API
+#                 imageUrl = openai_service.prompt_image(imageModel, parseText, imageSize)
+
+#                 if imageUrl is not None:
+#                     save_image(imageUrl)
+
+#                 # Return the results
+#                 return jsonify({'inputText': inputText, 'modText': parseText, 'imageUrl': imageUrl})
+#             else:
+#                 return jsonify({'error': 'InputText is None'})
+#         except Exception as e:
+#             logging.exception('Failed to generate image: %s', str(e))
+#             return jsonify({'error': 'Failed to generate image'})
+
+
+#         return jsonify({'inputText': inputText, 'modText': parseText, 'imageUrl':imageUrl})
+#     else:
+#         print('Unable to generate image')
+#         return jsonify({'error': 'Unable to generate image'})
 
 
 def save_image(imageUrl):
