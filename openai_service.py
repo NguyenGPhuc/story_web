@@ -17,25 +17,28 @@ client = OpenAI()
 # Handle rewriting a passage into a different theme
 def re_theme (rawText, author, category):
     # When text, author and category are used
-    if rawText != None && author != None && category != None:
+    if rawText != None & author != None & category != None:
         try:
             #Make your OpenAI API request here
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
-                prompt = "Rewite this passage [" + rawText + "], mimicking the writing of [" + author + "] adapting this category [" + category + "]"
+                prompt = "Rewite this passage [" + rawText + "]; mimicking the writing of [" + author + "] adapting this theme [" + category + "]"
             )
             
             diffTheme = completion.choices[0].text
+
             # Print out extra info
             print_info(diffTheme, completion)
 
             return diffTheme
         except openai.BadRequestError as e:
             print (f"API call failed: {e}")
-    elif rawText != None && author != None && category == None:
+
+    # When user text and author is used
+    elif rawText != None & author != None & category == None:
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
-                prompt = "Rewite this passage [" + rawText + "], mimicking the writing of [" + author + "] adapting this category [" + category + "]"
+                prompt = "Rewite this passage [" + rawText + "]; mimicking the writing style of [" + author + "]"
             )
             
             diffTheme = completion.choices[0].text
@@ -45,7 +48,50 @@ def re_theme (rawText, author, category):
 
             return diffTheme
 
+    # When user text and category is used
+    elif rawText != None & author == None & category != None:
+            completion = client.completions.create(
+                model='gpt-3.5-turbo-instruct',
+                prompt = "Rewite this passage [" + rawText + "]; in the theme of [" + category + "]"
+            )
+            
+            diffTheme = completion.choices[0].text
 
+            # Print out extra info
+            print_info(diffTheme, completion)
+
+            return diffTheme
+
+    # When user text is use (Fix grammar)
+    elif rawText != None & author == None & category == None:
+        completion = client.completions.create(
+            model='gpt-3.5-turbo-instruct',
+            prompt = "Fix any grammar issues found in this [" + rawText + "]"
+        )
+        
+        diffTheme = completion.choices[0].text
+
+        # Print out extra info
+        print_info(diffTheme, completion)
+
+        return diffTheme
+
+    # Random story generation when no parameter is passed
+    elif rawText == None & author == None & category == None:
+        completion = client.completions.create(
+            model='gpt-3.5-turbo-instruct',
+            prompt = "Creates a one pargraph story mimicking writting style of [" + author + "] in the theme of [" + category + "]" 
+        )
+        
+        diffTheme = completion.choices[0].text
+
+        # Print out extra info
+        print_info(diffTheme, completion)
+
+        return diffTheme
+    
+
+    
 
 # Handle (optional) image genration for the whole page
 def prompt_image(selectModel, texPrompt, size):
