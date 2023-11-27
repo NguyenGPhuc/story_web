@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <aName>Story Squire - A creative writting assistant</aName>
+    <title>Story Squire - A creative writing assistant</title>
     <!-- You can link your CSS file here if needed -->
     <!-- <link rel="stylesheet" href="static/css/style.css"> -->
 </head>
 <body>
-
     <div style="display: flex;">
 
         <!-- Text input area -->
@@ -24,7 +23,16 @@
     
     
                 <label for="authorDropdown">Select author</label>
-                <select id="authorDropdown"></select> 
+                <select id="authorDropdown" onchange="updateAuthorSummary()">
+                    {% for author in authors %}
+                        <option value="{{author.name}}"> "{{author.name}}" </option>
+                    {% endfor %}
+                </select> 
+
+                <div id="authorSummary">
+                    <!-- Author summary will be display here -->
+
+                </div>
     
                 <br>
 
@@ -32,7 +40,13 @@
                 <input type="text" id="categorySearch" placeholder="Enter category">
     
                 <label for="categoryDropdown">Select theme</label>
-                <select id="categoryDropdown"></select>
+                <select id="categoryDropdown">
+                    {% for category in categories %}
+                        <option value="{{category}}"> "{{category}}"</option>
+                    {% endfor %}
+                </select>
+
+
                 <button onClick="changeStyle()">Change Style</button>
                 <br>
         
@@ -48,73 +62,63 @@
         </div>
         
         <br>
-
-    
+    <!-- </body> -->
 
     <script>
+            
+            var authorsData = JSON.parse('{{ authors|tojson|safe }}');
 
-        document.addEventListener('DOMContentLoaded', function () {
+            function updateAuthorSummary() {
 
-            // Get reference to the dropdown
-            const authorDropdown = document.getElementById('authorDropdown');
-            const authorSearch = document.getElementById('authorSearch');
-
-            const categoryDropdown = document.getElementById('categoryDropdown');
-            const categorySearch = document.getElementById('categorySearch');
-
-
-        
-
-            function populateDropdown(dropdown, values) {
-                // Populate dropdown menu with values
-                values.forEach(value => {
-                    const option = document.createElement('option');
-                    option.value = value;
-                    option.textContent = value;
-                    dropdown.appendChild(option);
-                })
-            }
-
-            function getUniqueValues(items, property){
-                // Extract unique values from list of items
-                const values = items.reduce((allValues, item) => {
-                    const propValue = item.volumeInfo[property] || ['Unknown'];
-                    return allValues.concat(propValue);
-                }, []);
+                console.log('updateAuthorSummary called');
+                var selectedAuthor = document.getElementById('authorDropdown').value;
+            
+                //Find selected author summary
+                var selectedAuthorSummary = 'Brief summary ofthe author';
+                for (var i = 0; i < authorsData.length; i++){
+                    if (authorsData[i].name === selectedAuthor){
+                        selectedAuthorSummary = authorsData[i].summary;
+                        break;
+                    }
+                }
                 
-                return Array.from(new Set(values));
+                // Clear the existing content
+                var authorSummaryElement = document.getElementById('authorSummary');
+                authorSummaryElement.innerHTML = '';
+                
+                // Create a new paragraph element
+                var paragraph = document.createElement('p');
+                paragraph.textContent = selectedAuthorSummary;
+
+                // Append the paragraph to select summary
+                authorSummaryElement.appendChild(paragraph);
             }
 
+            // Change the style of writting
+            // function changeStyle(){
+            //     var inputText = document.getElementById('inputText').value;
 
-            function changeStyle(){
+            //     fetch('/changeTheme', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/x-www-form-urlencoded',
+            //         },
+            //         body: 'inputText=' + encodeURIComponent(inputText)
+            //     })
+            //     .then(response => response.json())
+            //     .then(data => {
 
-                var inputText = document.getElementById('inputText').value;
-
-                fetch('/changeTheme', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'inputText=' + encodeURIComponent(inputText)
-                })
-                .then(response => response.json())
-                .then(data => {
-
-
-                    // Display translated text in the textarea
-                    document.getElementById('ModdedTextArea').value = modText;
-
-                console.log('Response:', data);  
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
-        });
+            //         // Display translated text in the textarea
+            //         document.getElementById('ModdedTextArea').value = data.parseText;
+            //         console.log('Response:', data);  
+            //     })
+            //     .catch(error => {
+            //         console.error('Error:', error);
+            //     });
+            // }
 
 
         
     </script>
-
 </body>
 </html>
