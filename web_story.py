@@ -26,33 +26,43 @@ def home():
     return render_template('index.html', categories=categories, authors=authors)
 
 
-# @app.route('/changeTheme', methods=['POST'])
-# def change_theme():
-#     if request.method == "POST":
+@app.route('/changeTheme', methods=['POST'])
+def change_theme():
+    if request.method == "POST":
 
-#         # Get user input (Any language text)
-#         inputText = request.form.get('inputText')
-
-#         # 
-#         try:
-#             # Get modified text from API
-#             modText = openai_service.re_theme(inputText)
-#             # Remove any extra characters winthin the string
-#             parseText = modText.replace('"', '')
+        # Get user input (Any language text)
+        inputText = request.form.get('inputText')
+        selectAuthor = request.form.get('author')
+        selectCategory = request.form.get('category')
 
 
-#         except Exception as e:
-#             print('Error:', str(e))
-#             return jsonify({'error': 'Unable to call from API'})
+        print("User input: ", inputText)
+        print("Author: ", selectAuthor)
+        print("Category: ", selectCategory)
+
+        # 
+        try:
+            # Get modified text from API
+            modText = openai_service.re_theme(inputText, selectAuthor, selectCategory)
+            # Remove any extra characters winthin the string
+
+            parseText = modText.replace('"', '')
+
+
+
+
+        except Exception as e:
+            print('Error:', str(e))
+            return jsonify({'error': 'Unable to call from API'})
         
-#         # Return translated text in json format
-#         return jsonify({'parseText': parseText})
+        # Return translated text in json format
+        return jsonify({'parseText': parseText})
 
-#     else: 
-#         print ("User input was not processed correctly")
+    else: 
+        print ("User input was not processed correctly")
 
 
-#     return render_template('index.html', inputText='', modText='')
+    return render_template('index.html', inputText='', modText='')
 
 # Generate image using translated text
 # @app.route('/generateImage', methods=['POST'])

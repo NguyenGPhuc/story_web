@@ -3,8 +3,8 @@ import json
 import openai
 import logging
 from openai import OpenAI
-
 from config import openai_key
+import random
 
 # import api key and set in environment
 os.environ['OPENAI_API_KEY'] = openai_key
@@ -16,13 +16,22 @@ client = OpenAI()
 
 # Handle rewriting a passage into a different theme
 def re_theme (rawText, author, category):
+
+    if rawText != '':
+        averageMaxToken = len(rawText) * 2
+    else:
+        averageMaxToken = random.randint(150,300)
+
+    print('In re_theme')
+    print("User text: " + rawText)
     # When text, author and category are used
-    if rawText != None & author != None & category != None:
+    if rawText != '' and author != 'None' and category != 'None':
         try:
             #Make your OpenAI API request here
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
-                prompt = "Rewite this passage [" + rawText + "]; mimicking the writing of [" + author + "] adapting this theme [" + category + "]"
+                max_tokens = averageMaxToken,
+                prompt = "Rewite [" + rawText +  "], mimicking the writing of [" + author + "] in a theme of [" + category + "]"
             )
             
             diffTheme = completion.choices[0].text
@@ -34,11 +43,12 @@ def re_theme (rawText, author, category):
         except openai.BadRequestError as e:
             print (f"API call failed: {e}")
 
-    # When user text and author is used
-    elif rawText != None & author != None & category == None:
+    # When category not used
+    elif rawText != '' and author != 'None' and category == 'None':
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
-                prompt = "Rewite this passage [" + rawText + "]; mimicking the writing style of [" + author + "]"
+                max_tokens = averageMaxToken,
+                prompt = "Rewite [" + rawText + "]; mimicking the writing style of [" + author + "]"
             )
             
             diffTheme = completion.choices[0].text
@@ -48,11 +58,12 @@ def re_theme (rawText, author, category):
 
             return diffTheme
 
-    # When user text and category is used
-    elif rawText != None & author == None & category != None:
+    # When author is not used
+    elif rawText != '' and author == 'None' and category != 'None':
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
-                prompt = "Rewite this passage [" + rawText + "]; in the theme of [" + category + "]"
+                max_tokens = averageMaxToken,
+                prompt = "Rewite [" + rawText + "]; in the theme of [" + category + "]"
             )
             
             diffTheme = completion.choices[0].text
@@ -62,10 +73,11 @@ def re_theme (rawText, author, category):
 
             return diffTheme
 
-    # When user text is use (Fix grammar)
-    elif rawText != None & author == None & category == None:
+    # When author and category is not used (Fix grammar)
+    elif rawText != '' and author == 'None' and category == 'None':
         completion = client.completions.create(
             model='gpt-3.5-turbo-instruct',
+            max_tokens = averageMaxToken,
             prompt = "Fix any grammar issues found in this [" + rawText + "]"
         )
         
@@ -77,9 +89,10 @@ def re_theme (rawText, author, category):
         return diffTheme
 
     # Random story generation when no parameter is passed
-    elif rawText == None & author == None & category == None:
+    elif rawText == '' and author == 'None' and category == 'None':
         completion = client.completions.create(
             model='gpt-3.5-turbo-instruct',
+            max_tokens = averageMaxToken,
             prompt = "Creates a one pargraph story mimicking writting style of [" + author + "] in the theme of [" + category + "]" 
         )
         
@@ -115,7 +128,7 @@ def prompt_image(selectModel, texPrompt, size):
     
     except Exception as e:
         logging.exception('Failed to generate image: %s', str(e))
-        return None
+        return ''
 
 
 def print_info(text, api_reponse):

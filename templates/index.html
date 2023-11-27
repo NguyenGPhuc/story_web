@@ -95,27 +95,31 @@
             }
 
             // Change the style of writting
-            // function changeStyle(){
-            //     var inputText = document.getElementById('inputText').value;
+            function changeStyle(){
 
-            //     fetch('/changeTheme', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/x-www-form-urlencoded',
-            //         },
-            //         body: 'inputText=' + encodeURIComponent(inputText)
-            //     })
-            //     .then(response => response.json())
-            //     .then(data => {
+                var inputText = document.getElementById('inputText').value;
+                var selectAuthor = document.getElementById('authorDropdown').value;
+                var selectCategory = document.getElementById('categoryDropdown').value;
 
-            //         // Display translated text in the textarea
-            //         document.getElementById('ModdedTextArea').value = data.parseText;
-            //         console.log('Response:', data);  
-            //     })
-            //     .catch(error => {
-            //         console.error('Error:', error);
-            //     });
-            // }
+                fetch('/changeTheme', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'inputText=' + encodeURIComponent(inputText) + '&author=' + encodeURIComponent(selectAuthor) + '&category=' + encodeURIComponent(selectCategory)
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    // Display translated text in the textarea
+                    document.getElementById('ModdedTextArea').value = data.parseText;
+
+                    console.log('Response:', data);  
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
 
 
         

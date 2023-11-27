@@ -1,6 +1,10 @@
 {
   "authors": [
     {
+      "name": "None",
+      "summary":""
+    },
+    {
       "name": "Agatha Christie",
       "summary": "The best-selling novelist of all time, known for her detective novels, including 'Murder on the Orient Express' and 'Death on the Nile.'"
     },
