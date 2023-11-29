@@ -30,7 +30,7 @@ def home():
 def change_theme():
     if request.method == "POST":
 
-        # Get user input (Any language text)
+        # Get user input, author and category from front-end
         inputText = request.form.get('inputText')
         selectAuthor = request.form.get('author')
         selectCategory = request.form.get('category')
@@ -46,17 +46,20 @@ def change_theme():
             modText = openai_service.re_theme(inputText, selectAuthor, selectCategory)
             # Remove any extra characters winthin the string
 
-            parseText = modText.replace('"', '')
-
-
-
+            if inputText != '':
+                print('In IF')
+                parseText = modText.replace('/n/n', '')
+                return jsonify({'parseText': parseText})
+            else:
+                print('In ELSE')
+                return jsonify({'parseText': modText})
 
         except Exception as e:
             print('Error:', str(e))
             return jsonify({'error': 'Unable to call from API'})
         
         # Return translated text in json format
-        return jsonify({'parseText': parseText})
+        # return jsonify({'parseText': parseText})
 
     else: 
         print ("User input was not processed correctly")
@@ -94,47 +97,6 @@ def change_theme():
 #             return jsonify({'error': 'Failed to generate image'})
 
 #         return jsonify({'imageUrl':imageUrl})
-#     else:
-#         print('Unable to generate image')
-#         return jsonify({'error': 'Unable to generate image'})
-
-
-# # Doesn't display translated text.
-# @app.route('/translateText', methods=['POST'])
-# def g_translate():
-#     if request.method == 'POST':
-#         try:
-#             # Get user input (Vietnamese text)
-#             inputText = request.form.get('inputText')
-            
-#             # Check if inputText is not None before proceeding
-#             if inputText is not None:
-
-#                 print(inputText)
-
-#                 # Gets translation text from API
-#                 modText = openai_service.re_theme(inputText)
-                
-#                 # Remove any extra characters within the translation string
-#                 parseText = modText.replace('\n', '').replace('"', '').replace('.', '')
-
-
-#                 # Get generated image URL from API
-#                 imageUrl = openai_service.prompt_image(imageModel, parseText, imageSize)
-
-#                 if imageUrl is not None:
-#                     save_image(imageUrl)
-
-#                 # Return the results
-#                 return jsonify({'inputText': inputText, 'modText': parseText, 'imageUrl': imageUrl})
-#             else:
-#                 return jsonify({'error': 'InputText is None'})
-#         except Exception as e:
-#             logging.exception('Failed to generate image: %s', str(e))
-#             return jsonify({'error': 'Failed to generate image'})
-
-
-#         return jsonify({'inputText': inputText, 'modText': parseText, 'imageUrl':imageUrl})
 #     else:
 #         print('Unable to generate image')
 #         return jsonify({'error': 'Unable to generate image'})

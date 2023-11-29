@@ -1,0 +1,17 @@
+{
+  "languages": [
+    "Arabic",
+    "Chinese (Simplified)",
+    "English",
+    "French",
+    "German",
+    "Hindi",
+    "Italian",
+    "Japanese",
+    "Korean",
+    "Portuguese",
+    "Russian",
+    "Spanish",
+    "Vietnamese"
+  ]
+}

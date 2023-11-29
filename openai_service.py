@@ -18,7 +18,7 @@ client = OpenAI()
 def re_theme (rawText, author, category):
 
     if rawText != '':
-        averageMaxToken = len(rawText) * 2
+        averageMaxToken = len(rawText) * 1.5
     else:
         averageMaxToken = random.randint(150,300)
 
@@ -43,7 +43,7 @@ def re_theme (rawText, author, category):
         except openai.BadRequestError as e:
             print (f"API call failed: {e}")
 
-    # When category not used
+    # When category NOT used
     elif rawText != '' and author != 'None' and category == 'None':
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
@@ -58,7 +58,7 @@ def re_theme (rawText, author, category):
 
             return diffTheme
 
-    # When author is not used
+    # When author is NOT used
     elif rawText != '' and author == 'None' and category != 'None':
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
@@ -73,17 +73,15 @@ def re_theme (rawText, author, category):
 
             return diffTheme
 
-    # When author and category is not used (Fix grammar)
-    elif rawText != '' and author == 'None' and category == 'None':
+    # When user input is NOT used
+    elif rawText == '' and author != 'None' and category != 'None':
         completion = client.completions.create(
             model='gpt-3.5-turbo-instruct',
             max_tokens = averageMaxToken,
-            prompt = "Fix any grammar issues found in this [" + rawText + "]"
+            prompt = "Creates a short pargraph story mimicking writting style of [" + author + "] in the theme of [" + category + "]" 
         )
-        
-        diffTheme = completion.choices[0].text
 
-        # Print out extra info
+        diffTheme = completion.choices[0].text
         print_info(diffTheme, completion)
 
         return diffTheme
@@ -93,15 +91,48 @@ def re_theme (rawText, author, category):
         completion = client.completions.create(
             model='gpt-3.5-turbo-instruct',
             max_tokens = averageMaxToken,
-            prompt = "Creates a one pargraph story mimicking writting style of [" + author + "] in the theme of [" + category + "]" 
+            prompt = "Creates a one pargraph story"
         )
         
         diffTheme = completion.choices[0].text
-
         # Print out extra info
         print_info(diffTheme, completion)
 
         return diffTheme
+
+
+# When author and category is NOT used (Fix grammar)
+def grammar_fix(rawText, author, category):
+    try: 
+        if rawText != '' and author == 'None' and category == 'None':
+            completion = client.completions.create(
+                model='gpt-3.5-turbo-instruct',
+                max_tokens = averageMaxToken,
+                prompt = "Fix any grammar issues found in this [" + rawText + "]"
+            )
+            
+            diffTheme = completion.choices[0].text
+
+            # Print out extra info
+            print_info(diffTheme, completion)
+
+            return diffTheme
+        else:
+            return rawText
+    except openai.BadRequestError as e:
+            print (f"Bad openai request: {e}")
+
+
+
+# Translate function
+# def translate(user_text):
+#     comletion = client.completions.create(
+#         model='gpt-3.5-turbo-instruct',
+#         max_token = averageMaxToken,
+#         promt = ""
+
+#     )
+        
     
 
     
@@ -125,7 +156,7 @@ def prompt_image(selectModel, texPrompt, size):
         image_url = response.data[0].url
 
         return image_url
-    
+
     except Exception as e:
         logging.exception('Failed to generate image: %s', str(e))
         return ''

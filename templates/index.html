@@ -25,7 +25,7 @@
                 <label for="authorDropdown">Select author</label>
                 <select id="authorDropdown" onchange="updateAuthorSummary()">
                     {% for author in authors %}
-                        <option value="{{author.name}}"> "{{author.name}}" </option>
+                        <option value="{{author.name}}"> {{author.name}} </option>
                     {% endfor %}
                 </select> 
 
@@ -42,7 +42,7 @@
                 <label for="categoryDropdown">Select theme</label>
                 <select id="categoryDropdown">
                     {% for category in categories %}
-                        <option value="{{category}}"> "{{category}}"</option>
+                        <option value="{{category}}"> {{category}}</option>
                     {% endfor %}
                 </select>
 
@@ -50,6 +50,28 @@
                 <button onClick="changeStyle()">Change Style</button>
                 <br>
         
+            </div>
+
+            <div style="flex: 1; padding: 10px;">
+                <label for="languageFrom">Translate from</label>
+                <select id="languageFrom">
+                    {% for language in languages %}
+                        <option value="{{langauge}}"> {{language}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="languageTo">Translate to</label>
+                <select id="langaugeTo">
+                    {% for langauge in languages %}
+                        <option value="{{langauge}}"> {{language}}</option>
+                    {% endfor %}
+                </select>
+
+                <button onClick="translateText()">Translate</button>
+            </div>
+
+            <div style="flex: 1; padding: 10px;">
+                <button onClick="changeStyle()">Fix Grammar</button>
             </div>
         
         </div>
@@ -110,8 +132,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-
-                    // Display translated text in the textarea
+                    // Display modify text in the textarea
                     document.getElementById('ModdedTextArea').value = data.parseText;
 
                     console.log('Response:', data);  
@@ -120,6 +141,29 @@
                     console.error('Error:', error);
                 });
             }
+
+            // Translate modified text into another language
+            function translateText() {
+                var modtext = document.getElementById('ModdedTextArea').value;
+
+                fetch('/translateText',{
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'applicaion/x-www-form-urlencoded',
+                    },
+                    body: 'inputText=' + encodeURIComponent(inputText) + '&ModdedTextArea=' + encodeURIComponent(ModdedTextArea)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Display translate text in the textarea
+                    document.getElementById('ModdedTextArea').value = data.translateData
+                    console.log('Response:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
 
 
         
