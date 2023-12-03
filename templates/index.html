@@ -31,7 +31,6 @@
 
                 <div id="authorSummary">
                     <!-- Author summary will be display here -->
-
                 </div>
     
                 <br>
@@ -56,14 +55,14 @@
                 <label for="languageFrom">Translate from</label>
                 <select id="languageFrom">
                     {% for language in languages %}
-                        <option value="{{langauge}}"> {{language}}</option>
+                        <option value="{{language}}"> {{language}}</option>
                     {% endfor %}
                 </select>
 
                 <label for="languageTo">Translate to</label>
-                <select id="langaugeTo">
-                    {% for langauge in languages %}
-                        <option value="{{langauge}}"> {{language}}</option>
+                <select id="languageTo">
+                    {% for language in languages %}
+                        <option value="{{language}}"> {{language}}</option>
                     {% endfor %}
                 </select>
 
@@ -144,19 +143,22 @@
 
             // Translate modified text into another language
             function translateText() {
-                var modtext = document.getElementById('ModdedTextArea').value;
+
+                var inputText = document.getElementById('inputText').value;
+                var selectLanguageFrom = document.getElementById('languageFrom').value;
+                var selectLanguageTo = document.getElementById('languageTo').value;
 
                 fetch('/translateText',{
                     method: 'POST',
                     headers: {
                         'Content-type': 'applicaion/x-www-form-urlencoded',
                     },
-                    body: 'inputText=' + encodeURIComponent(inputText) + '&ModdedTextArea=' + encodeURIComponent(ModdedTextArea)
+                    body: 'inputText=' + encodeURIComponent(inputText) + '&languageFrom=' + encodeURIComponent(selectLanguageFrom) + '&languageTo=' + encodeURIComponent(selectLanguageTo)
                 })
                 .then(response => response.json())
                 .then(data => {
                     // Display translate text in the textarea
-                    document.getElementById('ModdedTextArea').value = data.translateData
+                    document.getElementById('ModdedTextArea').value = data.parseText
                     console.log('Response:', data);
                 })
                 .catch(error => {

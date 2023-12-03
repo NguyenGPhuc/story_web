@@ -13,17 +13,25 @@ app = Flask(__name__)
 @app.route('/')
 def home():
 
-    # read the options from file
+    # read author from file
     with open('author.txt', 'r') as file:
         authors_data = json.load(file)
         # For missing parameters
         authors = authors_data.get('authors', [])
+
+    # read category from file
     with open ('category.txt', 'r') as file:
         categories_data = json.load(file)
         categories = categories_data.get('categories', [])
 
+    # read langauge from file
+    with open ('languages.txt', 'r') as file:
+        language_data = json.load(file)
+        languages = language_data.get('languages', [])
+
+
     # print(json.dumps(authors))
-    return render_template('index.html', categories=categories, authors=authors)
+    return render_template('index.html', categories=categories, authors=authors, languages=languages)
 
 
 @app.route('/changeTheme', methods=['POST'])

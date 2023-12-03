@@ -123,6 +123,31 @@ def grammar_fix(rawText, author, category):
             print (f"Bad openai request: {e}")
 
 
+def translate_text(rawText, langFrom, langTo):
+
+    if langFrom == "None" or langTo == "None":
+        return "Need to select language"
+
+    try: 
+        if rawText != '' and langFrom != 'None' and langTo != 'None':
+            completion = client.completions.create(
+                model='gpt-3.5-turbo-instruct',
+                max_tokens = averageMaxToken,
+                prompt = "Translate this " + langFrom + "[" + rawText + "] to " +  langTo
+            )
+            
+            diffTheme = completion.choices[0].text
+
+            # Print out extra info
+            print_info(diffTheme, completion)
+
+            return diffTheme
+        else:
+            return rawText
+    except openai.BadRequestError as e:
+            print (f"Bad openai request: {e}")
+
+
 
 # Translate function
 # def translate(user_text):
