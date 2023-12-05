@@ -132,7 +132,7 @@
                 .then(response => response.json())
                 .then(data => {
                     // Display modify text in the textarea
-                    document.getElementById('ModdedTextArea').value = data.parseText;
+                    document.getElementById('ModdedTextArea').value = data.translateText;
 
                     console.log('Response:', data);  
                 })
@@ -144,30 +144,46 @@
             // Translate modified text into another language
             function translateText() {
 
-                var inputText = document.getElementById('inputText').value;
-                var selectLanguageFrom = document.getElementById('languageFrom').value;
-                var selectLanguageTo = document.getElementById('languageTo').value;
+                var inputTextElement = document.getElementById('inputText');
+    
 
-                fetch('/translateText',{
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'applicaion/x-www-form-urlencoded',
-                    },
-                    body: 'inputText=' + encodeURIComponent(inputText) + '&languageFrom=' + encodeURIComponent(selectLanguageFrom) + '&languageTo=' + encodeURIComponent(selectLanguageTo)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Display translate text in the textarea
-                    document.getElementById('ModdedTextArea').value = data.parseText
-                    console.log('Response:', data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                if (inputTextElement) {
+
+
+                    var inputText = inputTextElement.value;
+                    var selectLanguageFrom = document.getElementById('languageFrom').value;
+                    var selectLanguageTo = document.getElementById('languageTo').value;
+
+                    console.log(document.getElementById('inputText'));
+                    console.log('selectLanguageFrom:', selectLanguageFrom);
+                    console.log('selectLanguageTo:', selectLanguageTo);
+
+                    fetch('/translateText',{
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            inputText: inputText,
+                            languageFrom : selectLanguageFrom,
+                            languageTo : selectLanguageTo
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Display translate text in the textarea
+                        document.getElementById('ModdedTextArea').value = data.translateText;
+                        console.log('Response:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+                else {
+                    console.error('Error: Input text is empty or null');
+                }
+                
             }
-
-
-
         
     </script>
 </body>

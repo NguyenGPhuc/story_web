@@ -72,8 +72,45 @@ def change_theme():
     else: 
         print ("User input was not processed correctly")
 
-
     return render_template('index.html', inputText='', modText='')
+
+@app.route('/translateText', methods=['POST'])
+def translate_text():
+    if request.method == 'POST':
+
+        # unTranslate = request.form.get('inputText')
+        # selectFrom = request.form.get('languageFrom')
+        # selectTo = request.form.get('languageTo')
+
+
+        data = request.get_json()
+        if data:
+            unTranslate = data.get('inputText')
+            selectFrom = data.get('languageFrom')
+            selectTo = data.get('languageTo')
+
+        print('unTranslate:', unTranslate)
+        print('selectFrom:', selectFrom)
+        print('selectTo:', selectTo)
+
+        try:
+            # Get modified text from API
+            modText = openai_service.translate_text(unTranslate, selectFrom, selectTo)
+
+            # Remove any extra characters winthin the string
+            if modText != None:
+                print('In IF')
+                translateText = modText.replace('/n/n', '')
+                return jsonify({'translateText': translateText})
+            else:
+                print('In ELSE')
+                return jsonify({'translateText': modText})
+
+        except Exception as e:
+            print('Error:', str(e))
+            return jsonify({'error': 'Unable to call from API'})
+
+
 
 # Generate image using translated text
 # @app.route('/generateImage', methods=['POST'])

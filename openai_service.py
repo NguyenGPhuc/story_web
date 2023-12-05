@@ -103,6 +103,9 @@ def re_theme (rawText, author, category):
 
 # When author and category is NOT used (Fix grammar)
 def grammar_fix(rawText, author, category):
+
+    averageMaxToken = len(rawText) * 1.2
+
     try: 
         if rawText != '' and author == 'None' and category == 'None':
             completion = client.completions.create(
@@ -125,8 +128,13 @@ def grammar_fix(rawText, author, category):
 
 def translate_text(rawText, langFrom, langTo):
 
+    print("In translate")
+    print('Raw text: ', rawText)
+
     if langFrom == "None" or langTo == "None":
         return "Need to select language"
+
+    averageMaxToken = round(len(rawText) ** 1.2)
 
     try: 
         if rawText != '' and langFrom != 'None' and langTo != 'None':
@@ -146,20 +154,6 @@ def translate_text(rawText, langFrom, langTo):
             return rawText
     except openai.BadRequestError as e:
             print (f"Bad openai request: {e}")
-
-
-
-# Translate function
-# def translate(user_text):
-#     comletion = client.completions.create(
-#         model='gpt-3.5-turbo-instruct',
-#         max_token = averageMaxToken,
-#         promt = ""
-
-#     )
-        
-    
-
     
 
 # Handle (optional) image genration for the whole page
