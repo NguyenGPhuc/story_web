@@ -21,20 +21,20 @@ client = OpenAI()
 # viet_text = "Một cậu bé đi qua một cái cầu tre gỗ."
 
 
-# def truncate_to_complete_sentence(text, max_tokens):
-#     sentences = nltk.sent_tokenize(text)
-#     truncated_text = ""
-#     current_tokens = 0
+def truncate_to_complete_sentence(text, max_tokens):
+    sentences = nltk.sent_tokenize(text)
+    truncated_text = ""
+    current_tokens = 0
 
-#     for sentence in sentences:
-#         sentence_tokens = len(nltk.word_tokenize(sentence))
-#         if current_tokens + sentence_tokens <= max_tokens:
-#             truncated_text += sentence + " "
-#             current_tokens += sentence_tokens
-#         else:
-#             break
+    for sentence in sentences:
+        sentence_tokens = len(nltk.word_tokenize(sentence))
+        if current_tokens + sentence_tokens <= max_tokens:
+            truncated_text += sentence + " "
+            current_tokens += sentence_tokens
+        else:
+            break
 
-#     return truncated_text.strip()
+    return truncated_text.strip()
 
 
 # Handle rewriting a passage into a different theme

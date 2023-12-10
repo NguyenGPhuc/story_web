@@ -48,7 +48,6 @@ def change_theme():
         print("Author: ", selectAuthor)
         print("Category: ", selectCategory)
 
-        # 
         try:
             # Get modified text from API
             modText = openai_service.re_theme(inputText, selectAuthor, selectCategory)
