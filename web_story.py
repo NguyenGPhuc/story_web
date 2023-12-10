@@ -56,7 +56,7 @@ def change_theme():
 
             if inputText != '':
                 print('In IF')
-                parseText = modText.replace('/n/n', '')
+                parseText = modText.replace('\n', '')
                 return jsonify({'parseText': parseText})
             else:
                 print('In ELSE')
@@ -100,7 +100,7 @@ def translate_text():
             # Remove any extra characters winthin the string
             if modText != None:
                 print('In IF')
-                translateText = modText.replace('/n/n', '')
+                translateText = modText.replace('\n', '')
                 return jsonify({'translateText': translateText})
             else:
                 print('In ELSE')

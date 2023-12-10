@@ -132,7 +132,7 @@
                 .then(response => response.json())
                 .then(data => {
                     // Display modify text in the textarea
-                    document.getElementById('ModdedTextArea').value = data.translateText;
+                    document.getElementById('ModdedTextArea').value = data.parseText;
 
                     console.log('Response:', data);  
                 })

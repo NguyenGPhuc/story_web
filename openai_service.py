@@ -6,6 +6,13 @@ from openai import OpenAI
 from config import openai_key
 import random
 
+import sys
+print('Virual environment path: ', sys.executable)
+
+import nltk
+nltk.download('punkt')
+
+
 # import api key and set in environment
 os.environ['OPENAI_API_KEY'] = openai_key
 
@@ -14,13 +21,33 @@ client = OpenAI()
 # viet_text = "Một cậu bé đi qua một cái cầu tre gỗ."
 
 
+# def truncate_to_complete_sentence(text, max_tokens):
+#     sentences = nltk.sent_tokenize(text)
+#     truncated_text = ""
+#     current_tokens = 0
+
+#     for sentence in sentences:
+#         sentence_tokens = len(nltk.word_tokenize(sentence))
+#         if current_tokens + sentence_tokens <= max_tokens:
+#             truncated_text += sentence + " "
+#             current_tokens += sentence_tokens
+#         else:
+#             break
+
+#     return truncated_text.strip()
+
+
 # Handle rewriting a passage into a different theme
 def re_theme (rawText, author, category):
 
     if rawText != '':
-        averageMaxToken = len(rawText) * 1.5
+        averageMaxToken = round(len(rawText) * 1.2)
+        max_tokens = 1024
     else:
         averageMaxToken = random.randint(150,300)
+        max_tokens = 1024
+    
+    print (averageMaxToken)
 
     print('In re_theme')
     print("User text: " + rawText)
@@ -31,9 +58,25 @@ def re_theme (rawText, author, category):
             completion = client.completions.create(
                 model='gpt-3.5-turbo-instruct',
                 max_tokens = averageMaxToken,
-                prompt = "Rewite [" + rawText +  "], mimicking the writing of [" + author + "] in a theme of [" + category + "]"
+                prompt = "Rewite [" + rawText +  "], mimicking the writing of [" + author + "] in a theme of [" + category + "] ",
+                stop = '',
+                temperature=0.2
             )
-            
+
+            # while len(nltk.word_tokenize(reponse)) < averageMaxToken:
+            #     completion = cllient.completion.create(
+            #         model='gpt-3.5-turbo-instruct',
+            #         max_tokens = max_tokens,
+            #          prompt = "Rewite [" + rawText +  "], mimicking the writing of [" + author + "] in a theme of [" + category + "] ",
+            #         stop = ''
+            #     )
+
+            #     response += completion.choices[0].text
+            #     stop = reponse
+
+            # diffTheme = truncate_to_complete_sentence(response, averageMaxToken)
+            # print(diffTheme)
+
             diffTheme = completion.choices[0].text
 
             # Print out extra info
@@ -131,10 +174,11 @@ def translate_text(rawText, langFrom, langTo):
     print("In translate")
     print('Raw text: ', rawText)
 
+
+    averageMaxToken = round(len(rawText) * 1.2)
+
     if langFrom == "None" or langTo == "None":
         return "Need to select language"
-
-    averageMaxToken = round(len(rawText) ** 1.2)
 
     try: 
         if rawText != '' and langFrom != 'None' and langTo != 'None':
