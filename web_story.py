@@ -59,7 +59,8 @@ def change_theme():
                 return jsonify({'parseText': parseText})
             else:
                 print('In ELSE')
-                return jsonify({'parseText': modText})
+                parseText = modText.replace('\n', '')
+                return jsonify({'parseText': parseText})
 
         except Exception as e:
             print('Error:', str(e))
@@ -73,14 +74,11 @@ def change_theme():
 
     return render_template('index.html', inputText='', modText='')
 
+        
+
 @app.route('/translateText', methods=['POST'])
 def translate_text():
     if request.method == 'POST':
-
-        # unTranslate = request.form.get('inputText')
-        # selectFrom = request.form.get('languageFrom')
-        # selectTo = request.form.get('languageTo')
-
 
         data = request.get_json()
         if data:

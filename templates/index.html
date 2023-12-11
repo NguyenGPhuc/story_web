@@ -18,10 +18,7 @@
 
             <div style="flex: 1; padding: 10px;">
 
-                <label for="authorSearch">Search Authors:</label>
-                <input type="text" id="authorSearch" placeholder="Enter author's name">
-    
-    
+                <!-- author dropdown menu -->
                 <label for="authorDropdown">Select author</label>
                 <select id="authorDropdown" onchange="updateAuthorSummary()">
                     {% for author in authors %}
@@ -33,11 +30,7 @@
                     <!-- Author summary will be display here -->
                 </div>
     
-                <br>
-
-                <label for="categorySearch">Search Categories:</label>
-                <input type="text" id="categorySearch" placeholder="Enter category">
-    
+                <!-- category dropdown menu -->
                 <label for="categoryDropdown">Select theme</label>
                 <select id="categoryDropdown">
                     {% for category in categories %}
