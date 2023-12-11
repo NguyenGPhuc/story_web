@@ -75,7 +75,7 @@ def change_theme():
     return render_template('index.html', inputText='', modText='')
 
         
-
+# Pass to openAI for to translate
 @app.route('/translateText', methods=['POST'])
 def translate_text():
     if request.method == 'POST':
@@ -110,60 +110,66 @@ def translate_text():
 
 
 # Generate image using translated text
-# @app.route('/generateImage', methods=['POST'])
-# def generate_image():
-#     if request.method == 'POST':
-#         try:
+@app.route('/generateImage', methods=['POST'])
+def generate_image():
+    if request.method == 'POST':
+        try:
 
-#             # Set model and image size
-#             imageSize = request.form.get('imageDimensions')
-#             if imageSize == "512x512":
-#                 imageModel = 'dall-e-2'
-#             else:
-#                 imageModel = 'dall-e-3'
+            # Set model and image size
+            imageSize = request.form.get('imageDimensions')
+            if imageSize == "512x512":
+                imageModel = 'dall-e-2'
+            else:
+                imageModel = 'dall-e-3'
 
+            if request.form.get('ModdedTextArea') != '':
+                parseText = request.form.get('ModdedTextArea')
+                print('Return from front end: ', parseText)
+            elif request.form.get('modTextArea') == None and request.form.get('inputText') != '':
+                parseText = request.form.get('inputText')
+                print('Return from front end: ', parseText)
+            else:
+                return jsonify({'parseText' : 'To generate image you need a prompt'}  )
 
-#             parseText = request.form.get('modTextArea')
-
-#             # Get image url form API
-#             imageUrl = openai_service.prompt_image(imageModel, parseText, imageSize)
+            # Get image url form API
+            imageUrl = openai_service.prompt_image(imageModel, parseText, imageSize)
             
 
-
-#             if imageUrl is not None:
-#                 save_image(imageUrl)
+            if imageUrl is not None:
+                save_image(imageUrl)
            
 
-#         except Exception as e:
-#             logging.exception('Failed to generate image: %s', str(e))
-#             return jsonify({'error': 'Failed to generate image'})
+        except Exception as e:
+            logging.exception('Failed to generate image: %s', str(e))
+            return jsonify({'error': 'Failed to generate image'})
 
-#         return jsonify({'imageUrl':imageUrl})
-#     else:
-#         print('Unable to generate image')
-#         return jsonify({'error': 'Unable to generate image'})
+        return jsonify({'imageUrl':imageUrl})
+    else:
+        print('Unable to generate image')
+        return jsonify({'error': 'Unable to generate image'})
 
 
-# def save_image(imageUrl):
-#     try:
-#         output_folder = 'output'
-#         os.makedirs(output_folder, exist_ok=True)
+def save_image(imageUrl):
+    print ('In main image function')
+    try:
+        output_folder = 'output'
+        os.makedirs(output_folder, exist_ok=True)
 
-#         # Use date and time for naming
-#         timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-#         imageFilename = f'{timestamp}.jpeg'
-#         imagePath = os.path.join(output_folder, imageFilename)
+        # Use date and time for naming
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        imageFilename = f'{timestamp}.jpeg'
+        imagePath = os.path.join(output_folder, imageFilename)
 
-#         # Download the image from url
-#         imageData = requests.get(imageUrl).content
+        # Download the image from url
+        imageData = requests.get(imageUrl).content
     
-#         # Save image
-#         with open(imagePath, 'wb') as f:
-#             f.write(imageData)
+        # Save image
+        with open(imagePath, 'wb') as f:
+            f.write(imageData)
 
-#     except Exception as e:
-#         logging.exception('Failed to save image: %s', str(e))
-#         return jsonify({'error': 'Failed to save image'})
+    except Exception as e:
+        logging.exception('Failed to save image: %s', str(e))
+        return jsonify({'error': 'Failed to save image'})
 
 
 if __name__ == '__main__':

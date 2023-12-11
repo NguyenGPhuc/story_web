@@ -238,6 +238,7 @@ def translate_text(rawText, langFrom, langTo):
 
 # Handle (optional) image genration for the whole page
 def prompt_image(selectModel, texPrompt, size):
+    print ('In openAI image function')
     try:
         # Calling Dall-e API
         response = client.images.generate(

@@ -40,7 +40,10 @@
 
 
                 <button onClick="changeStyle()">Change Style</button>
-                <br>
+    
+               
+                <button onClick="changeStyle()">Fix Grammar</button>
+                
         
             </div>
 
@@ -62,8 +65,9 @@
                 <button onClick="translateText()">Translate</button>
             </div>
 
-            <div style="flex: 1; padding: 10px;">
-                <button onClick="changeStyle()">Fix Grammar</button>
+            <!-- Image display area -->
+            <div style="padding: 20px;">
+                <img id="generatedImage" alt="">
             </div>
         
         </div>
@@ -73,11 +77,30 @@
             <h3>Modified Text</h3>
             <textarea id="ModdedTextArea" rows="20" cols="100" placeholder="Modify text should appear here"></textarea>
             <br>
-        </div>
-        
-        <br>
-    <!-- </body> -->
+            <br>
+            <button onclick="generateImage()">Generate Image</button>
 
+
+            <!-- Radio buttons for image dimensions -->
+            <div style="flex: 1; padding: 20px;">
+                <h3>Image Dimensions</h3>
+                <input type="radio" id="dimension512" name="imageDimensions" value="512x512" checked>
+                <label for="dimension512">512x512</label><br>
+
+                <input type="radio" id="dimension1024" name="imageDimensions" value="1024x1024">
+                <label for="dimension1024">1024x1024</label><br>
+
+                <input type="radio" id="dimension1024x1792" name="imageDimensions" value="1024x1792">
+                <label for="dimension1024x1792">1024x1792</label><br>
+
+                <input type="radio" id="dimension1792x1024" name="imageDimensions" value="1792x1024">
+                <label for="dimension1792x1024">1792x1024</label><br>
+            </div>
+
+        </div>
+
+
+    <!-- </body> -->
     <script>
             
             var authorsData = JSON.parse('{{ authors|tojson|safe }}');
@@ -175,7 +198,31 @@
                 else {
                     console.error('Error: Input text is empty or null');
                 }
-                
+            }
+
+            function generateImage() {
+
+                var originalText = document.getElementById('inputText').value;
+                var cleanedTranslated = document.getElementById('ModdedTextArea').value;
+                var selectedDimensions = document.querySelector('input[name="imageDimensions"]:checked').value;
+
+                fetch('/generateImage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'ModdedTextArea=' + encodeURIComponent(cleanedTranslated) + '&inputText=' + encodeURIComponent(originalText) + '&imageDimensions=' + encodeURIComponent(selectedDimensions),
+                    
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    // Display the generated image
+                    document.getElementById('generatedImage').src = data.imageUrl;
+                    console.log('Response:', data);
+
+                console.log('Response:', data);  
+                });
             }
         
     </script>
