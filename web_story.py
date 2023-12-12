@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import openai_service
 import logging
 import os
 from datetime import datetime
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont 
 import requests
 import json
 
@@ -114,7 +114,6 @@ def translate_text():
 def generate_image():
     if request.method == 'POST':
         try:
-
             # Set model and image size
             imageSize = request.form.get('imageDimensions')
             if imageSize == "512x512":
@@ -125,11 +124,12 @@ def generate_image():
             if request.form.get('ModdedTextArea') != '':
                 parseText = request.form.get('ModdedTextArea')
                 print('Return from front end: ', parseText)
-            elif request.form.get('modTextArea') == None and request.form.get('inputText') != '':
+            elif request.form.get('ModdedTextArea') == None and request.form.get('inputText') != '':
                 parseText = request.form.get('inputText')
                 print('Return from front end: ', parseText)
             else:
                 return jsonify({'parseText' : 'To generate image you need a prompt'}  )
+
 
             # Get image url form API
             imageUrl = openai_service.prompt_image(imageModel, parseText, imageSize)
@@ -149,6 +149,77 @@ def generate_image():
         return jsonify({'error': 'Unable to generate image'})
 
 
+# Route to handle saving the story
+@app.route('/saveStory', methods=['POST'])
+def build_page():
+    if request.method == 'POST':
+        storyText = request.form.get('ModdedTextArea')
+        imageUrl = request.form.get('generated_Image')
+
+        # Dummy image
+        image_width = 512
+        image_height = 512
+
+        composite_image, text_width = generate_composite_image(storyText)
+
+         # Save the story
+        file_path = save_story(composite_image, text_width, storyText)
+        
+        # Send the file as a response
+        return send_file(file_path, as_attachment=True)
+
+# Generate composite image
+def generate_composite_image(user_text):
+    # Dummy image and text generation logic using Pillow (PIL)
+    image_width = 512
+    image_height = 512
+
+    composite_image = Image.new('RGB', (image_width, image_height), color='white')
+    draw = ImageDraw.Draw(composite_image)
+
+    # Font settings
+    font_size = 20
+    font = ImageFont.load_default()  # Use the default font
+
+    # Calculate text size before drawing the text
+    text_bbox = draw.textbbox((0, 0), user_text, font=font)
+    text_width = text_bbox[2] - text_bbox[0]
+
+    # Calculate text position
+    text_position = ((image_width - text_width) // 2, 10)
+
+    # Draw user text on top
+    draw.text(text_position, user_text, font=font, fill='black')
+
+    # Dummy image at the bottom
+    dummy_image = Image.new('RGB', (image_width, image_height // 2), color='blue')
+    composite_image.paste(dummy_image, (0, image_height // 2))
+
+    return (composite_image, text_width)
+
+
+# Save whole page
+def save_story(composite_image, text_width, user_text):
+    try:
+        output_folder = 'story_output'
+        os.makedirs(output_folder, exist_ok=True)
+
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        image_filename = f'{timestamp}.jpeg'
+
+        file_path = f'{output_folder}/{image_filename}'
+
+        composite_image.save(file_path)
+
+        return file_path
+
+    except Exception as e:
+        print('Error: ', e)
+        return None
+
+
+
+# Save image automatically
 def save_image(imageUrl):
     print ('In main image function')
     try:

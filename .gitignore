@@ -8,3 +8,4 @@ temp.txt
 output/
 /__pycache__
 node_modules/
+story_output/

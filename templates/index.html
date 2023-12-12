@@ -80,6 +80,8 @@
             <br>
             <button onclick="generateImage()">Generate Image</button>
 
+            <button onClick="save_story()">Save story and image</button>
+
 
             <!-- Radio buttons for image dimensions -->
             <div style="flex: 1; padding: 20px;">
@@ -219,6 +221,31 @@
 
                     // Display the generated image
                     document.getElementById('generatedImage').src = data.imageUrl;
+                    console.log('Response:', data);
+
+                console.log('Response:', data);  
+                });
+            }
+
+            // Save story with image function
+            function save_story() {
+
+                var cleanedTranslated = document.getElementById('ModdedTextArea').value;
+                var currentImage = document.getElementById('generatedImage').src;
+
+                fetch('/saveStory', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'ModdedTextArea=' + encodeURIComponent(cleanedTranslated) + '&generated_Image=' + encodeURIComponent(currentImage),
+                    
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    // Display the generated image
+                    // document.getElementById('generatedImage').src = data.imageUrl;
                     console.log('Response:', data);
 
                 console.log('Response:', data);  
