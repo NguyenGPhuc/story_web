@@ -239,11 +239,35 @@ def translate_text(rawText, langFrom, langTo):
 # Handle (optional) image genration for the whole page
 def prompt_image(selectModel, texPrompt, size):
     print ('In openAI image function')
+
+    if texPrompt != '':
+        averageMaxToken = round(len(texPrompt) * 1.2)
+
+    else:
+        originalLen = random.randint(100,200)
+        averageMaxToken = round(originalLen *1.2)
+    
+    try:
+        # parsing passage for Dall-e API
+        completion = client.completions.create(
+            model='gpt-3.5-turbo-instruct',
+            max_tokens = averageMaxToken,
+            prompt = "Parse this passage [" + texPrompt + "] into a one sentence main idea for Dall-e image generation prompt"
+        )
+            
+        dallePrep = completion.choices[0].text
+    
+    except Exception as e:
+        logging.exception('Failed to generate image: %s', str(e))
+        return ''
+
+    print ("parse for dalle", dallePrep)
+
     try:
         # Calling Dall-e API
         response = client.images.generate(
             model=selectModel,
-            prompt=texPrompt,
+            prompt=dallePrep,
             size=size,
             quality="standard",
             n=1,
@@ -268,4 +292,3 @@ def print_info(text, api_reponse):
     print(api_reponse.model_dump_json(indent=2))
 
     
-# prompt_image(translate_viet2en(viet_text))
