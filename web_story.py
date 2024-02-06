@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import requests
 import json
+import textwrap
 
 app = Flask(__name__)
 
@@ -169,34 +170,37 @@ def build_page():
         # Send the file as a response
         return send_file(file_path, as_attachment=True)
 
-# Generate composite image
 def generate_composite_image(user_text, imageUrl):
     # Dummy image and text generation logic using Pillow (PIL)
-    image_width = 512
-    image_height = 512
+    image_width = 768
+    image_height = 768
 
+    # Create a white image with an RGB mode
     composite_image = Image.new('RGB', (image_width, image_height), color='white')
     draw = ImageDraw.Draw(composite_image)
 
     # Font settings
-    font_size = 20
+    font_size = 60  # Adjust this as needed
     font = ImageFont.load_default()  # Use the default font
 
     # Padding and margin
-    padding = 20
-    text_margin = 20
+    padding = 50
+    text_margin = 10
+
+    # Break the text into lines using textwrap
+    wrapped_text = textwrap.fill(user_text, width=140)  # Adjust the width as needed
 
     # Calculate text size before drawing the text
-    text_bbox = draw.textbbox((padding, padding), user_text, font=font, spacing=text_margin)
+    text_bbox = draw.multiline_textbbox((padding, padding, image_width - padding, image_height - padding),
+                                         wrapped_text, font=font, spacing=text_margin)
     text_width = text_bbox[2] - text_bbox[0]
     text_height = text_bbox[3] - text_bbox[1]
 
-    # Calculate text position
-    text_position = ((image_width - text_width) // 2, padding)
+    # Calculate text position to center the text at the top
+    text_position = (((image_width - text_width) // 2), padding)
 
-    # Draw user text on top
-    draw.text(text_position, user_text, font=font, fill='black', spacing=text_margin)
-
+    # Draw wrapped user text with word wrapping
+    draw.multiline_text(text_position, wrapped_text, font=font, fill='black', spacing=text_margin, align='center')
 
     # If imageUrl is provided, fetch and paste the image
     if imageUrl:
@@ -205,15 +209,15 @@ def generate_composite_image(user_text, imageUrl):
             image_data = response.content  # Extract the content (bytes) from the response
             original_image = Image.open(BytesIO(image_data))
 
-            # Resize the image while maintaining the aspect ratio
-            max_image_height = image_height // 2  # Adjust this as needed
+            # Resize the image to a smaller size while maintaining the aspect ratio
+            max_image_height = 350  # Adjust this as needed
             aspect_ratio = original_image.width / original_image.height
             new_width = int(max_image_height * aspect_ratio)
             new_height = max_image_height
             resized_image = original_image.resize((new_width, new_height), Image.LANCZOS)
 
-             # Calculate the starting position to center the image horizontally
-            image_position = ((image_width - new_width) // 2, image_height // 2)
+            # Calculate the starting position to center the image horizontally at the bottom
+            image_position = (((image_width - new_width) // 2), (image_height - new_height - padding))
 
             composite_image.paste(resized_image, image_position)
 
@@ -221,6 +225,9 @@ def generate_composite_image(user_text, imageUrl):
             print('Error fetching and pasting image:', e)
 
     return (composite_image, text_width)
+
+
+
 
 
 # Save whole page
